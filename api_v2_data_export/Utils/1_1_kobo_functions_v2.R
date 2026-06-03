@@ -69,10 +69,13 @@ create_export <- function(url, headers, body){
 
 # ------- Function 2: Get export information --------
 
-get_export_info <- function(url, headers, max_attempts = 15, poll_interval = 10) {
+get_export_info <- function(url, headers, max_attempts = 15, poll_interval = 8) {
   attempt <- 1
   
   repeat {
+    
+    # sleep first to give export time to process
+    Sys.sleep(poll_interval)
     
     # Attempt to get export info
     export_info_response <- tryCatch({
@@ -121,13 +124,12 @@ get_export_info <- function(url, headers, max_attempts = 15, poll_interval = 10)
             if (!is.null(export_info$status)) export_info$status else "processing")
     
     attempt <- attempt + 1
-    Sys.sleep(poll_interval)
   }
 }
 
 
 
-# ------- Function 2: Generate and download export --------
+# ------- Function 3: Download export --------
 
 download_export <- function(download_url, headers, temp_file_ext = ".xlsx") {
   temp_file <- tempfile(fileext = temp_file_ext)
