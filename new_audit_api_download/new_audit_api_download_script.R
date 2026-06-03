@@ -3,6 +3,9 @@ rm(list = ls())
 
 library(httr)
 library(jsonlite)
+library(stringr)
+library(tidyverse)
+
 
 testing <- TRUE
 
@@ -22,13 +25,12 @@ if (str_detect(getwd(), "/EdwinGIBB/")) {
 
 
 # CHANGE FOR PROJECT
-form_uid <- "aHffC3VA9diqugBeeyQnTJ"
+form_uid <- "a86Ne93SgPR3YJqafWiTqX"
 
-# CHANGE FOR SERVER
+
+
+# set base url
 base_url <- paste0(url, "/", form_uid, "/data/")
-
-
-
 
 
 # dataframe of _ids linked to _uuids 
@@ -37,8 +39,19 @@ if (testing <- FALSE){
   audit_ids <- new_submissions |>
   select(sub_id = "_id", sub_uuid = "_uuid")
 } else if (testing <- TRUE){
-  test_ids <- c("3137013")
-  test_uuids <- c("41359158-ec82-494b-afbf-5e56292a9624")
+  test_ids <- c("2834951", "2835259",
+                "2835260",
+                "2835261",
+                "2835262",
+                "2835263"
+  )
+  test_uuids <- c("ff33e55a-0600-4619-88ad-0df16d4c6040", 
+                  "a8b37b07-62fd-44ce-b47e-f3edebff8590", 
+                  "b42a4069-2da7-46aa-873e-d701b1df98ef",
+                  "76130da1-568c-4f41-a531-708dc5df1ff2",
+                  "b82a4a37-516a-432e-b5a7-16019d4a4927",
+                  "6d6b69f4-ff80-4a3c-a46e-5480dad6a7a1"
+  )
   
   audit_ids <- data.frame(sub_id = test_ids, sub_uuid = test_uuids)
 }
@@ -80,7 +93,17 @@ for(sub_id in audit_ids$sub_id) {
 }
 
 
-
+# convert from list to dataframe  (to align with old tmp_audits code)
 audits_df <- tibble("_uuid" = names(audits_list), 
                         "audit_tbls" = audits_list)
+
+
+
+
+
+
+
+
+
+
 
